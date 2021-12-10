@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  postgresdb:
+    build: ${DATABASE_DIR}
+    container_name: ${SERVICE_NAME}-database
+    env_file:
+      - ${HUB_DIR}/env/postgres.env
+    networks:
+      - database
+    ports:
+      - 5432:5432
+
+  backend:
+    build: ${BACKEND_DIR}
+    image: ${SERVICE_NAME}-backend-image
+    container_name: ${SERVICE_NAME}-backend
+    env_file:
+      - ${HUB_DIR}/env/backend.env
+      - ${HUB_DIR}/env/postgres.env
+    volumes:
+      - ${BACKEND_DIR}/src:/app/src
+      - ${BACKEND_DIR}/.eslintrc.json:/app/.eslintrc.json
+      - ${BACKEND_DIR}/.prettierrc.json:/app/.prettierrc.json
+      - ${HUB_DIR}/env/wtn-firebase-privatekey.json:/app/wtn-firebase-privatekey.json
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    networks:
+      - database
+
+  frontend:
+    build: ${FRONTEND_DIR}
+    image: ${SERVICE_NAME}-frontend-image
+    container_name: ${SERVICE_NAME}-frontend
+    env_file:
+      - ${HUB_DIR}/env/frontend.env
+    volumes:
+      - ${FRONTEND_DIR}/src:/app/src
+      - ${FRONTEND_DIR}/public:/app/public
+    ports:
+      - ${REACT_APP_PORT}:${REACT_APP_PORT}
+    tty: true
+    stdin_open: true
+    networks:
+      - database
+
+networks:
+  database:
+    external:
+      name: ${SERVICE_NAME}-database-net
