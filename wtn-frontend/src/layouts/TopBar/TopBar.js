@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useRef, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
+import React, { useState, useRef, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
+import clsx from "clsx";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/styles";
 import {
   AppBar,
   Badge,
@@ -20,78 +20,78 @@ import {
   ListItemIcon,
   ListItemText,
   ClickAwayListener,
-  Typography
-} from '@material-ui/core';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import InputIcon from '@material-ui/icons/Input';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+  Typography,
+} from "@material-ui/core";
+import NotificationsIcon from "@material-ui/icons/NotificationsOutlined";
+import InputIcon from "@material-ui/icons/Input";
+import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
 
-import axios from 'utils/axios';
-import useRouter from 'utils/useRouter';
-import { PricingModal, NotificationsPopover } from 'components';
-import { useAuth } from 'hooks/use-auth';
+import axios from "utils/axios";
+import useRouter from "utils/useRouter";
+import { PricingModal, NotificationsPopover } from "components";
+import { useAuth } from "hooks/use-auth";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    boxShadow: 'none'
+    boxShadow: "none",
   },
   flexGrow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   search: {
-    backgroundColor: 'rgba(255,255,255, 0.1)',
+    backgroundColor: "rgba(255,255,255, 0.1)",
     borderRadius: 4,
     flexBasis: 300,
     height: 36,
     padding: theme.spacing(0, 2),
-    display: 'flex',
-    alignItems: 'center'
+    display: "flex",
+    alignItems: "center",
   },
   searchIcon: {
     marginRight: theme.spacing(2),
-    color: 'inherit'
+    color: "inherit",
   },
   searchInput: {
     flexGrow: 1,
-    color: 'inherit',
-    '& input::placeholder': {
+    color: "inherit",
+    "& input::placeholder": {
       opacity: 1,
-      color: 'inherit'
-    }
+      color: "inherit",
+    },
   },
   searchPopper: {
-    zIndex: theme.zIndex.appBar + 100
+    zIndex: theme.zIndex.appBar + 100,
   },
   searchPopperContent: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   trialButton: {
     marginLeft: theme.spacing(2),
     color: theme.palette.white,
     backgroundColor: colors.green[600],
-    '&:hover': {
-      backgroundColor: colors.green[900]
-    }
+    "&:hover": {
+      backgroundColor: colors.green[900],
+    },
   },
   trialIcon: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   notificationsButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   notificationsBadge: {
-    backgroundColor: colors.orange[600]
+    backgroundColor: colors.orange[600],
   },
   logoutButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   logoutIcon: {
-    marginRight: theme.spacing(1)
-  }
+    marginRight: theme.spacing(1),
+  },
 }));
 
-const TopBar = props => {
+const TopBar = (props) => {
   const { onOpenNavBarMobile, className, ...rest } = props;
 
   const classes = useStyles();
@@ -100,28 +100,8 @@ const TopBar = props => {
   const notificationsRef = useRef(null);
   const [pricingModalOpen, setPricingModalOpen] = useState(false);
   const [openSearchPopover, setOpenSearchPopover] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-  const [notifications, setNotifications] = useState([]);
-  const [openNotifications, setOpenNotifications] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const auth = useAuth();
-
-  useEffect(() => {
-    let mounted = true;
-
-    const fetchNotifications = () => {
-      axios.get('/api/account/notifications').then(response => {
-        if (mounted) {
-          setNotifications(response.data.notifications);
-        }
-      });
-    };
-
-    fetchNotifications();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   const handleLogout = () => {
     auth.signout();
@@ -135,15 +115,7 @@ const TopBar = props => {
     setPricingModalOpen(false);
   };
 
-  const handleNotificationsOpen = () => {
-    setOpenNotifications(true);
-  };
-
-  const handleNotificationsClose = () => {
-    setOpenNotifications(false);
-  };
-
-  const handleSearchChange = event => {
+  const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
 
     if (event.target.value) {
@@ -160,11 +132,11 @@ const TopBar = props => {
   };
 
   const popularSearches = [
-    'Devias React Dashboard',
-    'Devias',
-    'Admin Pannel',
-    'Project',
-    'Pages'
+    "Devias React Dashboard",
+    "Devias",
+    "Admin Pannel",
+    "Project",
+    "Pages",
   ];
 
   return (
@@ -172,8 +144,8 @@ const TopBar = props => {
       <Toolbar>
         <RouterLink to="/">
           {/* <img alt="Logo" src="/images/logos/logo--white.svg" /> */}
-          <Typography style={{ color: 'white' }} variant="h4">
-           Hệ thống quản lý thi trắc nghiệm
+          <Typography style={{ color: "white" }} variant="h4">
+            Hệ thống quản lý thi trắc nghiệm
           </Typography>
         </RouterLink>
         <div className={classes.flexGrow} />
@@ -192,15 +164,17 @@ const TopBar = props => {
             anchorEl={searchRef.current}
             className={classes.searchPopper}
             open={openSearchPopover}
-            transition>
+            transition
+          >
             <ClickAwayListener onClickAway={handleSearchPopverClose}>
               <Paper className={classes.searchPopperContent} elevation={3}>
                 <List>
-                  {popularSearches.map(search => (
+                  {popularSearches.map((search) => (
                     <ListItem
                       button
                       key={search}
-                      onClick={handleSearchPopverClose}>
+                      onClick={handleSearchPopverClose}
+                    >
                       <ListItemIcon>
                         <SearchIcon />
                       </ListItemIcon>
@@ -216,19 +190,20 @@ const TopBar = props => {
           <IconButton
             className={classes.notificationsButton}
             color="inherit"
-            onClick={handleNotificationsOpen}
-            ref={notificationsRef}>
+            ref={notificationsRef}
+          >
             <Badge
-              badgeContent={notifications.length}
               classes={{ badge: classes.notificationsBadge }}
-              variant="dot">
+              variant="dot"
+            >
               <NotificationsIcon />
             </Badge>
           </IconButton>
           <Button
             className={classes.logoutButton}
             color="inherit"
-            onClick={handleLogout}>
+            onClick={handleLogout}
+          >
             <InputIcon className={classes.logoutIcon} />
             Đăng xuất
           </Button>
@@ -240,19 +215,13 @@ const TopBar = props => {
         </Hidden>
       </Toolbar>
       <PricingModal onClose={handlePricingClose} open={pricingModalOpen} />
-      <NotificationsPopover
-        anchorEl={notificationsRef.current}
-        notifications={notifications}
-        onClose={handleNotificationsClose}
-        open={openNotifications}
-      />
     </AppBar>
   );
 };
 
 TopBar.propTypes = {
   className: PropTypes.string,
-  onOpenNavBarMobile: PropTypes.func
+  onOpenNavBarMobile: PropTypes.func,
 };
 
 export default TopBar;

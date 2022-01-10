@@ -2,10 +2,8 @@ FROM node:14.17-alpine3.14
 
 WORKDIR /app
 
-COPY jsconfig.json ./
-COPY package.json ./
-COPY yarn.lock ./
+COPY /build/ ./build
 
-RUN yarn install
+RUN yarn global add serve
 
-CMD ["yarn", "start"]
+CMD ["serve", "-s", "build"]
